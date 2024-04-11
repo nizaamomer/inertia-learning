@@ -14,4 +14,18 @@ class UserController extends Controller
 
         return Inertia::render('Admin/Users/index', compact('users'));
     }
+    public function create(){
+        return Inertia::render('Admin/Users/form');
+    }
+    public function store(Request $request){
+
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        User::create($data);
+        // return Inertia::render('Admin/Users/form');
+        // return redirect()->route('admin.users.index');
+    }
 }
