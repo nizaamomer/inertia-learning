@@ -1,12 +1,11 @@
 <template>
-    <div>
-        welcome page
-        <div>
-            <Link   href="/about">about</Link>
-        </div>
-    </div>
+    <div>welcome page</div>
 </template>
 <script setup>
-    import { Link } from '@inertiajs/vue3';
-    
+import Layout from "@/Layouts/layout.vue";
+</script>
+<script>
+export default {
+    layout: Layout,
+};
 </script>
