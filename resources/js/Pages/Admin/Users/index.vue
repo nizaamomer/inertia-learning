@@ -1,4 +1,7 @@
 <template>
+    <Head><title>slaw</title></Head>
+    <!-- or -->
+    <Head title="posts"/>
     <div>
         <!-- component -->
         <section class="container px-4 mx-auto">
@@ -97,12 +100,27 @@
 </template>
 <script setup>
 import Layout from "@/Layouts/admin.vue";
-import { Link, router } from "@inertiajs/vue3";
+import { createInertiaApp, Link, router,Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import debounce from "lodash/debounce";
 const props = defineProps(["users", "search"]);
 const search = ref(props.search);
+createInertiaApp({
+  progress: {
+    // The delay after which the progress bar will appear, in milliseconds...
+    delay: 250,
 
+    // The color of the progress bar...
+    color: '#29d',
+
+    // Whether to include the default NProgress styles...
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown...
+    showSpinner: true,
+  },
+  // ...
+})
 watch(
     search,
     debounce((newvalue) => {

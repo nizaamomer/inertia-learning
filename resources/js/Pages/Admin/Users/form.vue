@@ -180,7 +180,21 @@
 <script setup>
 import Layout from "@/Layouts/admin.vue";
 import { reactive } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { createInertiaApp, router, useForm } from "@inertiajs/vue3";
+createInertiaApp({
+  progress: {    delay: 120,
+
+    // The color of the progress bar...
+    color: '#ebeb',
+
+    // Whether to include the default NProgress styles...
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown...
+    showSpinner: true,
+  },
+  // ...
+})
 const form = useForm({
     name: "",
     email: "",

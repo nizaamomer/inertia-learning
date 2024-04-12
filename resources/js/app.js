@@ -9,6 +9,7 @@ createInertiaApp({
     page.default.layout = page.default.layout || Layout
     return page
   },
+  title:title=> `${title} - learning app`,
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
