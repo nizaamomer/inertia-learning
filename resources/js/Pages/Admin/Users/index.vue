@@ -8,6 +8,7 @@
                         class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
                     >
                         <Link href="/users/create">Create User</Link>
+                        <input type="search" v-model="search" class="border" />
                         <div
                             class="s-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg w-8/12 mx-auto my-3"
                         >
@@ -82,6 +83,7 @@
                     v-for="link in users.links"
                     :key="link.index"
                     v-html="link.label"
+                    preserve-scroll
                     :href="link.url"
                     :class="{
                         'dark:bg-gray-600': !link.url,
@@ -95,8 +97,32 @@
 </template>
 <script setup>
 import Layout from "@/Layouts/admin.vue";
-import { Link } from "@inertiajs/vue3";
-defineProps(["users"]);
+import { Link, router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+const props = defineProps(["users","search"]);
+const search = ref(props.search);
+
+watch(search, newvalue=> {
+    router.get("/admin/users",{
+        search: newvalue
+    },{
+            preserveState: true,
+            preserveScroll:true,
+            only: ["users"],
+        })
+});
+// watch(search, (newvalue) => {
+//     router.get(
+//         "/admin/users",
+//         {
+//             search: newvalue,
+//         },
+//         {
+//             preserveState: true,
+//             only: "users",
+//         }
+//     );
+// });
 </script>
 <script>
 export default {

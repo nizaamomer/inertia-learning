@@ -9,13 +9,17 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $users  = User::all();
-        $users  = User::paginate(2);
-        return Inertia::render('Admin/Users/index',  [
-            'users' => $users,
-        ]);
+       // $users = User::all();
+    $users = User::when($request->search, function ($q) use ($request) {
+        $q->where('name', 'LIKE', '%' . $request->search . '%');
+    })->paginate(7)->withQueryString();
+
+    return Inertia::render('Admin/Users/index', [
+        'users' => $users,
+        'search' => $request->search
+    ]);
     }
     public function create()
     {
