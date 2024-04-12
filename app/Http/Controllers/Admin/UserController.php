@@ -9,15 +9,19 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(){
-        $users = User::all();
+    public function index()
+    {
 
-        return Inertia::render('Admin/Users/index', compact('users'));
+        return Inertia::render('Admin/Users/index',  [
+            'users' => User::all(),
+        ]);
     }
-    public function create(){
+    public function create()
+    {
         return Inertia::render('Admin/Users/form');
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $data = $request->validate([
             'name' => 'required',
@@ -25,8 +29,7 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         User::create($data);
-       
+
         return to_route('users.index');
     }
-    
 }
