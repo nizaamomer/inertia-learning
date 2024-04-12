@@ -99,19 +99,27 @@
 import Layout from "@/Layouts/admin.vue";
 import { Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
-const props = defineProps(["users","search"]);
+import debounce from "lodash/debounce";
+const props = defineProps(["users", "search"]);
 const search = ref(props.search);
 
-watch(search, newvalue=> {
-    router.get("/admin/users",{
-        search: newvalue
-    },{
-            preserveState: true,
-            preserveScroll:true,
-            replace:true,
-            only: ["users"],
-        })
-});
+watch(
+    search,
+    debounce((newvalue) => {
+        router.get(
+            "/admin/users",
+            {
+                search: newvalue,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                only: ["users"],
+            }
+        );
+    },1000)
+);
 // watch(search, (newvalue) => {
 //     router.get(
 //         "/admin/users",
