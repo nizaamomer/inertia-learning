@@ -202,7 +202,7 @@ const form = useForm({
 //     });
 // };
 const store = () => {
-    form.post("/admin/users", {
+    form.post(route('admin.users.store'), {
         // Handle successful form submission
      preserveScroll: true,
 

@@ -7,7 +7,7 @@
                     <div
                         class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
                     >
-                        <Link href="/users/create">Create User</Link>
+                        <Link :href="route('admin.users.create')">Create User</Link>
                         <input type="search" v-model="search" class="border" />
                         <div
                             class="s-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg w-8/12 mx-auto my-3"

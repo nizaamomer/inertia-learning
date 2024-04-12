@@ -13,6 +13,7 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return inertia('contact');
 });
-Route::prefix('admin')->group(function(){
-    Route::resource('users',UserController::class);
+Route::prefix('admin')->group(function () {
+    Route::resource('users', UserController::class)
+        ->names('admin.users');
 });

@@ -9,6 +9,7 @@
   </head>
   <script src="https://cdn.tailwindcss.com"></script>
   <body>
+    @routes
     @inertia
   </body>
 </html>
