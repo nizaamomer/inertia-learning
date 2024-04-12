@@ -16,6 +16,7 @@ Route::get('/contact', function () {
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class)
         ->names('admin.users');
+        Route::post('logout',[AuthController::class, 'logout'])->name('logout');
 });
 Route::get('login',[AuthController::class, 'login'])->name('login');
 Route::post('login',[AuthController::class, 'loginStore'])->name('login.store');

@@ -7,15 +7,23 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(){
+    public function login()
+    {
         return inertia('login');
     }
-    public function loginStore(Request $request){
+    public function loginStore(Request $request)
+    {
         $data = $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
-        if(!Auth::attempt($data))
+        if (!Auth::attempt($data))
             return redirect()->back()->withErrors(['email' => 'zyandyaryakant hallan ']);
-        return to_route('admin.users.index');    }
+        return to_route('admin.users.index');
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return to_route('login');
+    }
 }
