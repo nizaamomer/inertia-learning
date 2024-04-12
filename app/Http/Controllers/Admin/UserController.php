@@ -11,9 +11,10 @@ class UserController extends Controller
 {
     public function index()
     {
-
+        // $users  = User::all();
+        $users  = User::paginate(2);
         return Inertia::render('Admin/Users/index',  [
-            'users' => User::all(),
+            'users' => $users,
         ]);
     }
     public function create()
