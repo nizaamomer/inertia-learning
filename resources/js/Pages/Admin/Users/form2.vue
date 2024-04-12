@@ -108,9 +108,10 @@
                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
-                        {{ form.errors.name }}
-                    </div>
+                        {{ errors.name }}
 
+                    </div>
+                    
                     <div class="sm:col-span-3">
                         <label
                             for="last-name"
@@ -127,7 +128,7 @@
                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
-                        {{ form.errors.email }}
+                        {{ errors.email }}
                     </div>
 
                     <div class="sm:col-span-4">
@@ -146,18 +147,11 @@
                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
-                        {{ form.errors.password }}
+                        {{ $page.props.errors.password }}
                     </div>
                 </div>
             </div>
         </div>
-        <progress
-            v-if="form.progress"
-            :value="form.progress.percentage"
-            max="100"
-        >
-            {{ form.progress.percentage }}%
-        </progress>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
             <button
@@ -168,7 +162,6 @@
             </button>
             <button
                 type="submit"
-                :disabled="form.processing"
                 class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
                 Save
@@ -177,49 +170,26 @@
     </form>
 </template>
 <script setup>
+defineProps(['errors'])
 import Layout from "@/Layouts/admin.vue";
 import { reactive } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
-const form = useForm({
+import { router } from "@inertiajs/vue3";
+const form = reactive({
     name: "",
     email: "",
     password: "",
 });
-// const store = () => {
-//     form.post("/users", form, {
-//         // preserveScroll: true,
-//         onSuccess: () => form.reset(),
-//         // form.clearErrors()
-//         // form.clearErrors('field', 'anotherfield')
-//         // Set a single error...
-//         // form.setError('field', 'Your error message.');
-
-//         // // Set multiple errors at once...
-//         // form.setError({
-//         //   foo: 'Your error message for the foo field.',
-//         //   bar: 'Some other error for the bar field.'
-//         // });
-//     });
-// };
 const store = () => {
-    form.post("/admin/users", {
-        // Handle successful form submission
-     preserveScroll: true,
-
+    router.post("/admin/users", form, {
         onSuccess: () => {
-            form.reset(); // Reset the form fields
+            Object.assign(form, {
+                name: "",
+                email: "",
+                password: "",
+            });
         },
-        // Handle form validation errors
-        // onError: (errors) => {
-        //     // Example: Display the first error message for each field
-        //     Object.keys(errors).forEach((field) => {
-        //         const error = errors[field][0];
-        //         form.setError(field, error);
-        //     });
-        // },
     });
 };
-
 </script>
 <script>
 export default {

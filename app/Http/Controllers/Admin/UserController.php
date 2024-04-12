@@ -25,7 +25,8 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         User::create($data);
-        // return Inertia::render('Admin/Users/form');
-        // return redirect()->route('admin.users.index');
+       
+        return to_route('users.index');
     }
+    
 }
