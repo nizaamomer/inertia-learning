@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
     return inertia('home');
@@ -13,7 +13,9 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return inertia('contact');
 });
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class)
         ->names('admin.users');
 });
+Route::get('login',[AuthController::class, 'login'])->name('login');
+Route::post('login',[AuthController::class, 'loginStore'])->name('login.store');
