@@ -108,7 +108,7 @@ watch(search, newvalue=> {
     },{
             preserveState: true,
             preserveScroll:true,
-            // replace:true,
+            replace:true,
             only: ["users"],
         })
 });
