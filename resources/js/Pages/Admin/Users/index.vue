@@ -15,6 +15,8 @@
                         <div
                             class="s-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg w-8/12 mx-auto my-3"
                         >
+                        
+                        {{ $page.props.flash.message }}
                             <table
                                 class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
                             >

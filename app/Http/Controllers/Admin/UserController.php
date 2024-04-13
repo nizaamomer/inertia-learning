@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        sleep('3');
+        // sleep('3');
        // $users = User::all();
     $users = User::when($request->search, function ($q) use ($request) {
         $q->where('name', 'LIKE', '%' . $request->search . '%');
@@ -36,6 +36,6 @@ class UserController extends Controller
         ]);
         User::create($data);
 
-        return to_route('users.index');
+        return to_route('admin.users.index')->with('message', 'user created successfully');
     }
 }
