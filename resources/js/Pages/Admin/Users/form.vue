@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="store" class="w-6/12 mx-auto pb-20">
+    <form @submit.prevent="store" enctype="multipart/form-data"  class="w-6/12 mx-auto pb-20">
         <div class="space-y-12">
             <div class="border-b border-gray-900/10 pb-12">
                 <div
@@ -64,17 +64,31 @@
                                     >
                                         <span>Upload a file</span>
                                         <input
+                                            @input="
+                                                form.image =
+                                                    $event.target.files[0]
+                                            "
                                             id="file-upload"
                                             name="file-upload"
                                             type="file"
                                             class="sr-only"
                                         />
+                                        <progress
+                                            v-if="form.progress"
+                                            :value="form.progress.percentage"
+                                            max="100"
+                                        >
+                                            {{ form.progress.percentage }}%
+                                        </progress>
                                     </label>
                                     <p class="pl-1">or drag and drop</p>
                                 </div>
                                 <p class="text-xs leading-5 text-gray-600">
+                                    {{ form.errors.image }}
+
                                     PNG, JPG, GIF up to 10MB
                                 </p>
+                                
                             </div>
                         </div>
                     </div>
@@ -151,14 +165,9 @@
                 </div>
             </div>
         </div>
-        <progress
-            v-if="form.progress"
-            :value="form.progress.percentage"
-            max="100"
-        >
-            {{ form.progress.percentage }}%
-        </progress>
-
+        
+     
+        <img :src="form.image" alt="">
         <div class="mt-6 flex items-center justify-end gap-x-6">
             <button
                 type="button"
@@ -179,27 +188,47 @@
 
 <script setup>
 import Layout from "@/Layouts/admin.vue";
-import { reactive } from "vue";
-import { createInertiaApp, router, useForm } from "@inertiajs/vue3";
+import { onMounted, defineProps } from "vue";
+import { createInertiaApp, useForm } from "@inertiajs/vue3";
+const props = defineProps(["user"]);
 createInertiaApp({
-  progress: {    delay: 120,
-
-    // The color of the progress bar...
-    color: '#ebeb',
-
-    // Whether to include the default NProgress styles...
-    includeCSS: true,
-
-    // Whether the NProgress spinner will be shown...
-    showSpinner: true,
-  },
-  // ...
-})
+    progress: {
+        delay: 120,
+        color: "#ebeb",
+        includeCSS: true,
+        showSpinner: true,
+    },
+});
 const form = useForm({
     name: "",
     email: "",
     password: "",
+    image: null,
 });
+onMounted(() => {
+    if (props.user) {
+        Object.assign(form, props.user);
+    }
+});
+const store = () => {
+    if (props.user) {
+        form.put(route("admin.users.update", props.user.id), {
+            preserveScroll: true,
+            forceFormData: true,
+            onSuccess: () => {
+                form.reset();
+            },
+        });
+    } else {
+        form.post(route("admin.users.store"), {
+            preserveScroll: true,
+            forceFormData: true,
+            onSuccess: () => {
+                form.reset();
+            },
+        });
+    }
+};
 // const store = () => {
 //     form.post("/users", form, {
 //         // preserveScroll: true,
@@ -214,27 +243,15 @@ const form = useForm({
 //         //   foo: 'Your error message for the foo field.',
 //         //   bar: 'Some other error for the bar field.'
 //         // });
+// onError: (errors) => {
+//     // Example: Display the first error message for each field
+//     Object.keys(errors).forEach((field) => {
+//         const error = errors[field][0];
+//         form.setError(field, error);
+//     });
+// },
 //     });
 // };
-const store = () => {
-    form.post(route('admin.users.store'), {
-        // Handle successful form submission
-     preserveScroll: true,
-
-        onSuccess: () => {
-            form.reset(); // Reset the form fields
-        },
-        // Handle form validation errors
-        // onError: (errors) => {
-        //     // Example: Display the first error message for each field
-        //     Object.keys(errors).forEach((field) => {
-        //         const error = errors[field][0];
-        //         form.setError(field, error);
-        //     });
-        // },
-    });
-};
-
 </script>
 <script>
 export default {

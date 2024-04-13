@@ -1,7 +1,7 @@
 <template>
     <Head><title>slaw</title></Head>
     <!-- or -->
-    <Head title="posts"/>
+    <Head title="posts" />
     <div>
         <!-- component -->
         <section class="container px-4 mx-auto">
@@ -10,13 +10,14 @@
                     <div
                         class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
                     >
-                        <Link :href="route('admin.users.create')">Create User</Link>
+                        <Link :href="route('admin.users.create')"
+                            >Create User</Link
+                        >
                         <input type="search" v-model="search" class="border" />
                         <div
                             class="s-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg w-8/12 mx-auto my-3"
                         >
-                        
-                        {{ $page.props.flash.message }}
+                            {{ $page.props.flash.message }}
                             <table
                                 class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
                             >
@@ -72,7 +73,10 @@
                                         <td
                                             class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap"
                                         >
-                                            edit
+                                           
+                                            <Link :href="route('admin.users.edit',user.id)"  class="bg-indigo-500 text-gray-50 font-semibold px-4 py-2 rounded-md">Edit</Link>
+                                            <button @click="destroy(user.id)" type="button" class="bg-red-500 text-gray-50 font-semibold px-4 py-2 rounded-md">Delete</button>
+                                            
                                         </td>
                                     </tr>
                                 </tbody>
@@ -102,27 +106,33 @@
 </template>
 <script setup>
 import Layout from "@/Layouts/admin.vue";
-import { createInertiaApp, Link, router,Head } from "@inertiajs/vue3";
+import { createInertiaApp, Link, router, Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import debounce from "lodash/debounce";
 const props = defineProps(["users", "search"]);
 const search = ref(props.search);
 createInertiaApp({
-  progress: {
-    // The delay after which the progress bar will appear, in milliseconds...
-    delay: 250,
+    progress: {
+        // The delay after which the progress bar will appear, in milliseconds...
+        delay: 250,
 
-    // The color of the progress bar...
-    color: '#29d',
+        // The color of the progress bar...
+        color: "#29d",
 
-    // Whether to include the default NProgress styles...
-    includeCSS: true,
+        // Whether to include the default NProgress styles...
+        includeCSS: true,
 
-    // Whether the NProgress spinner will be shown...
-    showSpinner: true,
-  },
-  // ...
-})
+        // Whether the NProgress spinner will be shown...
+        showSpinner: true,
+    },
+    // ...
+});
+const destroy = (id)=>{
+    if(confirm("Are you sure you want to destroy?")){
+        router.delete(route('admin.users.destroy',id));
+        
+    }
+}
 watch(
     search,
     debounce((newvalue) => {
@@ -138,7 +148,7 @@ watch(
                 only: ["users"],
             }
         );
-    },1000)
+    }, 1000)
 );
 // watch(search, (newvalue) => {
 //     router.get(
